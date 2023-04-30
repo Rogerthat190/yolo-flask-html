@@ -27,7 +27,7 @@ class LoadImages:  # for inference
         self.cap = None
     def load_info(self):
         img0 = self.data
-        assert img0 is not None, 'Image Not Found '
+        #assert img0 is not None, 'Image Not Found '
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
         img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
         img = np.ascontiguousarray(img)
@@ -52,7 +52,7 @@ def detect(source = "data/images/zidane.jpg",half=None,model=None,device=None,im
     dataset = LoadImages(source, img_size=imgsz, stride=stride).load_info()
     # Get names and colors
     names = model.module.names if hasattr(model, 'module') else model.names
-    colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
+    colors = [[random.randint(0, 255) for _ in range(1)] for _ in names]
     # Run inference
     if device.type != 'cpu':
         model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
@@ -67,7 +67,7 @@ def detect(source = "data/images/zidane.jpg",half=None,model=None,device=None,im
     t1 = time_synchronized()
     pred = model(img, augment=False)[0]
     # Apply NMS
-    pred = non_max_suppression(pred,0.25, 0.45, classes=[0,1,2,3,4], agnostic=False)
+    pred = non_max_suppression(pred, 0.25, 0.45, classes=[0,1,2,3,4], agnostic=False)
     t2 = time_synchronized()
     s, im0, frame =  str(''), im0s, getattr(dataset, 'frame', 0)
     for i, det in enumerate(pred):
