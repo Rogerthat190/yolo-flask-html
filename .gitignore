@@ -1,1 +1,4 @@
 .pt
+yolov5x.pt
+runs/detect/exp5/0.mp4
+*.mp4
